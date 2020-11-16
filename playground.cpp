@@ -64,15 +64,43 @@ int main( void )
 	GLuint programID = LoadShaders( "SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader" );
 
 	static const GLfloat g_vertex_buffer_data[] = {
-	-1.0f, -1.0f, 0.0f,
-	1.0f, -1.0f, 0.0f,
-	0.0f, 1.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,
+		-1.0f, -1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
+
+		-1.0f, -1.0f, 0.0f,
+		-1.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
+
+		0.0f,  1.5f, 0.0f,
+		1.0f, 1.0f, 0.0f,
+		-1.0f, 1.0f, 0.0f,
 	};
 
 	GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+
+	// One color for each vertex.
+	static const GLfloat g_color_buffer_data[] = {
+		1.0, 0.0f, 0.0f,
+		1.0, 0.0f, 0.0f,
+		1.0, 0.0f, 0.0f,
+		
+		0.0, 1.0f, 0.0f,
+		0.0, 1.0f, 0.0f,
+		0.0, 1.0f, 0.0f,
+		
+		0.0, 0.0f, 1.0f,
+		0.0, 0.0f, 1.0f,
+		0.0, 0.0f, 1.0f,
+	};
+
+	GLuint colorbuffer;
+	glGenBuffers(1, &colorbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
 
 	do{
 		// Clear the screen
@@ -94,8 +122,21 @@ int main( void )
 			(void*)0 // array buffer offset
 		);
 
+		// 2nd attribute buffer : colors
+		glEnableVertexAttribArray(1);
+		glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+		glVertexAttribPointer(
+			1, // attribute 1.
+			// No particular reason for 1, but must match the layout in the shader.
+			3, // size
+			GL_FLOAT, // type
+			GL_FALSE, // normalized?
+			0, // stride
+			(void*)0 // array buffer offset
+		);
+
 		// Draw the triangle !
-		glDrawArrays(GL_TRIANGLES, 0, 3); // 3 indices starting at 0 -> 1 triangle
+		glDrawArrays(GL_TRIANGLES, 0, 9); // 3 indices starting at 0 -> 1 triangle
 
 		glDisableVertexAttribArray(0);
 
