@@ -54,7 +54,10 @@ int main( void )
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
 	// Dark blue background
-	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+	// glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+
+	// White background
+	glClearColor(255.0f, 255.0f, 255.0f, 0.0f);
 
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
@@ -64,17 +67,19 @@ int main( void )
 	GLuint programID = LoadShaders( "SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader" );
 
 	static const GLfloat g_vertex_buffer_data[] = {
+		-1.0f, -1.0f, 0.0f,
 		1.0f, -1.0f, 0.0f,
-		-1.0f, -1.0f, 0.0f,
 		1.0f, 1.0f, 0.0f,
 
 		-1.0f, -1.0f, 0.0f,
-		-1.0f, 1.0f, 0.0f,
 		1.0f, 1.0f, 0.0f,
+		-1.0f, -1.0f, 0.0f,
 
-		0.0f,  1.5f, 0.0f,
+		-1.0f,  1.0f, 0.0f,
 		1.0f, 1.0f, 0.0f,
-		-1.0f, 1.0f, 0.0f,
+		0.0f, 1.5f, 0.0f,
+
+		-1.0f, 1.0f, 0.0f
 	};
 
 	GLuint vertexbuffer;
@@ -84,17 +89,17 @@ int main( void )
 
 	// One color for each vertex.
 	static const GLfloat g_color_buffer_data[] = {
-		1.0, 0.0f, 0.0f,
-		1.0, 0.0f, 0.0f,
-		1.0, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
 		
-		0.0, 1.0f, 0.0f,
-		0.0, 1.0f, 0.0f,
-		0.0, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
 		
-		0.0, 0.0f, 1.0f,
-		0.0, 0.0f, 1.0f,
-		0.0, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f,
 	};
 
 	GLuint colorbuffer;
@@ -136,7 +141,14 @@ int main( void )
 		);
 
 		// Draw the triangle !
-		glDrawArrays(GL_TRIANGLES, 0, 9); // 3 indices starting at 0 -> 1 triangle
+		// glDrawArrays(GL_TRIANGLES, 0, 9); // 3 indices starting at 0 -> 1 triangle
+
+		glDrawArrays(GL_LINES, 0, 10); // 10 indices starting at 0 -> 5 lines
+		glDrawArrays(GL_LINE_STRIP, 0, 10); // 10 indices starting at 0 -> 5 lines
+		glDrawArrays(GL_POINTS, 0, 10); // 10 indices starting at 0 -> 10 points
+
+		// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 		glDisableVertexAttribArray(0);
 
