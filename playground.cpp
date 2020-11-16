@@ -54,10 +54,10 @@ int main( void )
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
 	// Dark blue background
-	// glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
 	// White background
-	glClearColor(255.0f, 255.0f, 255.0f, 0.0f);
+	// glClearColor(255.0f, 255.0f, 255.0f, 0.0f);
 
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
@@ -66,20 +66,42 @@ int main( void )
 	// Create and compile our GLSL program from the shaders
 	GLuint programID = LoadShaders( "SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader" );
 
+	// Get a handle for our "MVP" uniform
+	GLuint MatrixID = glGetUniformLocation(programID, "MVP");
+
+	// Projection matrix : 45 degrees Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+	glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+	// Or, for an ortho camera :
+	//glm::mat4 Projection = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.0f,100.0f); // In world coordinates
+
+	// Camera matrix
+	glm::mat4 View = glm::lookAt(
+		glm::vec3(4,3,3), // Camera is at (4,3,3), in World Space
+		glm::vec3(0,0,0), // and looks at the origin
+		glm::vec3(0,1,0) // Head is up (set to 0,-1,0 to look upside-down)
+	);
+	// Model matrix : an identity matrix (model will be at the origin)
+	glm::mat4 Model = glm::mat4(1.0f);
+	// Our ModelViewProjection : multiplication of our 3 matrices
+	glm::mat4 MVP = Projection * View * Model;
+	// Remember, matrix multiplication is the other way around
+
 	static const GLfloat g_vertex_buffer_data[] = {
-		-1.0f, -1.0f, 0.0f,
 		1.0f, -1.0f, 0.0f,
+		-1.0f, -1.0f, 0.0f,
 		1.0f, 1.0f, 0.0f,
 
 		-1.0f, -1.0f, 0.0f,
+		-1.0f, 1.0f, 0.0f,
 		1.0f, 1.0f, 0.0f,
-		-1.0f, -1.0f, 0.0f,
 
-		-1.0f,  1.0f, 0.0f,
+		0.0f,  1.5f, 0.0f,
 		1.0f, 1.0f, 0.0f,
-		0.0f, 1.5f, 0.0f,
+		-1.0f, 1.0f, 0.0f,
 
-		-1.0f, 1.0f, 0.0f
+		-1.0f, -1.0f, 0.1f,
+		0.0f, 1.0f, 0.1f,
+		1.0f, -1.0f, 0.1f
 	};
 
 	GLuint vertexbuffer;
@@ -100,6 +122,10 @@ int main( void )
 		0.0f, 0.0f, 1.0f,
 		0.0f, 0.0f, 1.0f,
 		0.0f, 0.0f, 1.0f,
+		
+		1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
 	};
 
 	GLuint colorbuffer;
@@ -109,7 +135,17 @@ int main( void )
 
 	do{
 		// Clear the screen
-		glClear( GL_COLOR_BUFFER_BIT );
+		// glClear( GL_COLOR_BUFFER_BIT );
+		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+		// Send our transformation to the currently bound shader,
+		// in the "MVP" uniform
+		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+
+		// Enable depth test
+		glEnable(GL_DEPTH_TEST);
+		// Accept fragment if it closer to the camera than the former one
+		glDepthFunc(GL_LESS);
 
 		// Use our shader
 		glUseProgram(programID);
@@ -141,11 +177,11 @@ int main( void )
 		);
 
 		// Draw the triangle !
-		// glDrawArrays(GL_TRIANGLES, 0, 9); // 3 indices starting at 0 -> 1 triangle
+		glDrawArrays(GL_TRIANGLES, 0, 12); // 3 indices starting at 0 -> 1 triangle
 
-		glDrawArrays(GL_LINES, 0, 10); // 10 indices starting at 0 -> 5 lines
-		glDrawArrays(GL_LINE_STRIP, 0, 10); // 10 indices starting at 0 -> 5 lines
-		glDrawArrays(GL_POINTS, 0, 10); // 10 indices starting at 0 -> 10 points
+		// glDrawArrays(GL_LINES, 0, 10); // 10 indices starting at 0 -> 5 lines
+		// glDrawArrays(GL_LINE_STRIP, 0, 10); // 10 indices starting at 0 -> 5 lines
+		// glDrawArrays(GL_POINTS, 0, 10); // 10 indices starting at 0 -> 10 points
 
 		// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
