@@ -54,10 +54,10 @@ int main( void )
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
 	// Dark blue background
-	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+	// glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
 	// White background
-	// glClearColor(255.0f, 255.0f, 255.0f, 0.0f);
+	glClearColor(255.0f, 255.0f, 255.0f, 0.0f);
 
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
@@ -93,21 +93,53 @@ int main( void )
 	// Remember, matrix multiplication is the other way around
 
 	static const GLfloat g_vertex_buffer_data[] = {
-		1.0f, -1.0f, 0.0f,
-		-1.0f, -1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f,
+		-1.0f, -1.0f, 1.0f,
+		1.0f, -1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
 
-		-1.0f, -1.0f, 0.0f,
-		-1.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f,
+		-1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		-1.0f, -1.0f, 1.0f,
 
-		0.0f,  1.5f, 0.0f,
-		1.0f, 1.0f, 0.0f,
-		-1.0f, 1.0f, 0.0f,
+		-1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f, 1.0f, -1.0f,
 
-		-1.0f, -1.0f, 0.1f,
-		0.0f, 1.0f, 0.1f,
-		1.0f, -1.0f, 0.1f
+		-1.0f, 1.0f, -1.0f,
+		1.0f, 1.0f, -1.0f,
+		-1.0f, -1.0f,-1.0f,
+
+		-1.0f, 1.0f, -1.0f,
+		1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f, 1.0f,
+
+		-1.0f, 1.0f, -1.0f,
+		1.0f, 1.0f, -1.0f,
+		1.0f, 1.0f, 1.0f,
+
+		-1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f, 1.0f,
+		-1.0f, -1.0f, 1.0f,
+
+		-1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f, 1.0f,
+		 
+		1.0f, -1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, -1.0f,
+
+		1.0f, -1.0f, 1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f, 1.0f, -1.0f,		
+		 
+		-1.0f, -1.0f, 1.0f,
+		-1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f, -1.0f,
+
+		-1.0f, -1.0f, 1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, 1.0f, -1.0f,
 	};
 
 	GLuint vertexbuffer;
@@ -117,21 +149,53 @@ int main( void )
 
 	// One color for each vertex.
 	static const GLfloat g_color_buffer_data[] = {
-		1.0f, 0.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
+		0.0, 1.0f, 0.0f,
+		0.0, 1.0f, 0.0f,
+		0.0, 1.0f, 0.0f,
+
+		0.0, 1.0f, 0.0f,
+		0.0, 1.0f, 0.0f,
+		0.0, 1.0f, 0.0f,
 		
-		0.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,
+		0.0, 1.0f, 0.0f,
+		0.0, 1.0f, 0.0f,
+		0.0, 1.0f, 0.0f,
+
+		0.0, 1.0f, 0.0f,
+		0.0, 1.0f, 0.0f,
+		0.0, 1.0f, 0.0f,
 		
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
+		1.0, 0.0f, 0.0f,
+		1.0, 0.0f, 0.0f,
+		1.0, 0.0f, 0.0f,
+
+		1.0, 0.0f, 0.0f,
+		1.0, 0.0f, 0.0f,
+		1.0, 0.0f, 0.0f,
 		
-		1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
+		1.0, 0.0f, 0.0f,
+		1.0, 0.0f, 0.0f,
+		1.0, 0.0f, 0.0f,
+
+		1.0, 0.0f, 0.0f,
+		1.0, 0.0f, 0.0f,
+		1.0, 0.0f, 0.0f,
+		
+		0.0, 0.0f, 1.0f,
+		0.0, 0.0f, 1.0f,
+		0.0, 0.0f, 1.0f,
+
+		0.0, 0.0f, 1.0f,
+		0.0, 0.0f, 1.0f,
+		0.0, 0.0f, 1.0f,
+		
+		0.0, 0.0f, 1.0f,
+		0.0, 0.0f, 1.0f,
+		0.0, 0.0f, 1.0f,
+
+		0.0, 0.0f, 1.0f,
+		0.0, 0.0f, 1.0f,
+		0.0, 0.0f, 1.0f,
 	};
 
 	GLuint colorbuffer;
@@ -147,14 +211,46 @@ int main( void )
 		0.0f, 0.0f, 1.0f,
 		0.0f, 0.0f, 1.0f,
 		0.0f, 0.0f, 1.0f,
+		
+		0.0f, 0.0f, -1.0f,
+		0.0f, 0.0f, -1.0f,
+		0.0f, 0.0f, -1.0f,
 
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, -1.0f,
+		0.0f, 0.0f, -1.0f,
+		0.0f, 0.0f, -1.0f,
+		
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
 
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		
+		0.0f, -1.0f, 0.0f,
+		0.0f, -1.0f, 0.0f,
+		0.0f, -1.0f, 0.0f,
+
+		0.0f, -1.0f, 0.0f,
+		0.0f, -1.0f, 0.0f,
+		0.0f, -1.0f, 0.0f,
+		
+		1.0f, 0.0f, 0.0f, 
+		1.0f, 0.0f, 0.0f, 
+		1.0f, 0.0f, 0.0f,
+
+		1.0f, 0.0f, 0.0f, 
+		1.0f, 0.0f, 0.0f, 
+		1.0f, 0.0f, 0.0f, 
+		
+		-1.0f, 0.0f, 0.0f, 
+		-1.0f, 0.0f, 0.0f, 
+		-1.0f, 0.0f, 0.0f,
+
+		-1.0f, 0.0f, 0.0f, 
+		-1.0f, 0.0f, 0.0f, 
+		-1.0f, 0.0f, 0.0f,
 	};
 
 	GLuint normalbuffer;
@@ -250,7 +346,7 @@ int main( void )
 		glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &View[0][0]);
 
 		// Draw the triangle !
-		glDrawArrays(GL_TRIANGLES, 0, 9); // 3 indices starting at 0 -> 1 triangle
+		glDrawArrays(GL_TRIANGLES, 0, 36); // 3 indices starting at 0 -> 1 triangle
 
 		// glDrawArrays(GL_LINES, 0, 10); // 10 indices starting at 0 -> 5 lines
 		// glDrawArrays(GL_LINE_STRIP, 0, 10); // 10 indices starting at 0 -> 5 lines
@@ -259,20 +355,23 @@ int main( void )
 		// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-		glm::mat4 RotationModel = glm::mat4(0.0f, 0.0f, 1.0f, 0.0f,
-								0.0f, 1.0f, 0.0f, 0.0f,
-								1.0f, 0.0f, 0.0f, 0.0f,
-								0.0f, 0.0f, 0.0f, 1.0f);
+		// glm::mat4 RotationModel = glm::mat4(0.0f, 0.0f, 1.0f, 0.0f,
+		// 	0.0f, 1.0f, 0.0f, 0.0f,
+		// 	1.0f, 0.0f, 0.0f, 0.0f,
+		// 	0.0f, 0.0f, 0.0f, 1.0f
+		// );
 
-		Model = Model * RotationModel;
+		// Model = Model * RotationModel;
 
-		MVP = Projection * View * Model;
+		// MVP = Projection * View * Model;
 		
-		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+		// glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 		
-		glDrawArrays(GL_TRIANGLES, 0, 9);
+		// glDrawArrays(GL_TRIANGLES, 0, 9);
 
 		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
 
 		// Swap buffers
 		glfwSwapBuffers(window);
