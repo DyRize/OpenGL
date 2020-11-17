@@ -136,17 +136,18 @@ int main( void )
 	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
 
+	float deltaTime;
+	float lastFrame = 0;
+	float angle = 0;
+
 	do{
 		// Clear the screen
 		// glClear( GL_COLOR_BUFFER_BIT );
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-		// Send our transformation to the currently bound shader,
-		// in the "MVP" uniform
-		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-
 		// Enable depth test
 		glEnable(GL_DEPTH_TEST);
+
 		// Accept fragment if it closer to the camera than the former one
 		glDepthFunc(GL_LESS);
 
@@ -179,8 +180,30 @@ int main( void )
 			(void*)0 // array buffer offset
 		);
 
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		angle += 3.14159f/2.0f * deltaTime;
+
+		float c = (float) cos(angle);
+		float s = (float) sin(angle);
+		// Model matrix : an identity matrix (model will be at the origin)
+		// Model = glm::mat4(1.0f);; // A bit to the right
+		Model = { c ,0.0f,s, 0.0f,
+		0.0f,1.0f,0.0f, 0.0f,
+		-s ,0.0f,c , 0.0f,
+		0.0f,0.0f,0.0f, 1.0f};//glm::mat4(1.0f);*/
+
+		MVP = Projection * View * Model;
+		// Remember, matrix multiplication is the other way around
+
+		// Send our transformation to the currently bound shader,
+		// in the "MVP" uniform
+		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+
 		// Draw the triangle !
-		glDrawArrays(GL_TRIANGLES, 0, 12); // 3 indices starting at 0 -> 1 triangle
+		glDrawArrays(GL_TRIANGLES, 0, 9); // 3 indices starting at 0 -> 1 triangle
 
 		// glDrawArrays(GL_LINES, 0, 10); // 10 indices starting at 0 -> 5 lines
 		// glDrawArrays(GL_LINE_STRIP, 0, 10); // 10 indices starting at 0 -> 5 lines
@@ -188,6 +211,19 @@ int main( void )
 
 		// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+		glm::mat4 RotationModel = glm::mat4(0.0f, 0.0f, 1.0f, 0.0f,
+								0.0f, 1.0f, 0.0f, 0.0f,
+								1.0f, 0.0f, 0.0f, 0.0f,
+								0.0f, 0.0f, 0.0f, 1.0f);
+
+		Model = Model * RotationModel;
+
+		MVP = Projection * View * Model;
+		
+		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+		
+		glDrawArrays(GL_TRIANGLES, 0, 9);
 
 		glDisableVertexAttribArray(0);
 
